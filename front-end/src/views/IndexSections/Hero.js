@@ -43,8 +43,11 @@ class Hero extends React.Component {
     const { fetchUserDetails: user } = this.props;
 
     if (user !== this.state.user) {
+      const { familyName, givenName } = user.profile.name;
+
       this.setState({
-        user
+        user,
+        fullName: `${givenName} ${familyName}`
       });
     }
   }
@@ -101,7 +104,7 @@ class Hero extends React.Component {
                   <Col className="text-center" lg="6">
                   
                     <p className="lead text-white">
-                      { Object.keys(this.state.user).length === 0 ? 'If you press the login button on the top right corner, it will Ask your facebook Username and Password. Then it will show your user details here in facebook' : `Hi ${this.state.user.profile.name.givenName} ${this.state.user.profile.name.familyName}, you are now Logged in...!` }
+                      { Object.keys(this.state.user).length === 0 ? 'If you press the login button on the top right corner, it will Ask your facebook Username and Password. Then it will show your user details here in facebook' : `Hi ${ this.state.fullName }, you are now Logged in...!` }
                     </p>
                     <div className="mt-5">
                       <small className="text-white font-weight-bold mb-0 mr-2">
