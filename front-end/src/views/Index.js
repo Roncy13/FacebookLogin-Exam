@@ -23,17 +23,33 @@ import DemoNavbar from "components/Navbars/DemoNavbar.js";
 // index page sections
 import Hero from "./IndexSections/Hero.js";
 class Index extends React.Component {
+  state = {
+    user: {}
+  }
+
+  constructor() {
+    super();
+    this.fetchUserDetails = this.fetchUserDetails.bind(this);
+  }
+
   componentDidMount() {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     this.refs.main.scrollTop = 0;
   }
+
+  fetchUserDetails (details) {
+    this.setState({
+      user: details
+    });
+  }
+
   render() {
     return (
       <>
-        <DemoNavbar />
+        <DemoNavbar userDetails={this.fetchUserDetails} />
         <main ref="main">
-          <Hero />
+          <Hero fetchUserDetails = { this.state.user } />
         </main>
       </>
     );

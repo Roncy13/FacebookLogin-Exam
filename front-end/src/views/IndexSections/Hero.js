@@ -32,11 +32,21 @@ const override = css`
 class Hero extends React.Component {
 
   state = {
-    loading: false
+    loading: false,
+    user: {}
   }
-  constructor() {
-    super();
-    this.responseFacebook = this.responseFacebook.bind(this);
+  constructor(props) {
+    super(props);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { fetchUserDetails: user } = this.props;
+
+    if (user !== this.state.user) {
+      this.setState({
+        user
+      });
+    }
   }
 
   async componentDidMount() {
@@ -54,10 +64,6 @@ class Hero extends React.Component {
         toast.error("You can't move forward without logging in");
       } 
     }
-  }
-
-  responseFacebook(params) {
-    console.log(params);
   }
  
   render() {
@@ -95,7 +101,7 @@ class Hero extends React.Component {
                   <Col className="text-center" lg="6">
                   
                     <p className="lead text-white">
-                      If you press the login button on the top right corner, it will Ask your facebook Username and Password. Then it will show your user details here in facebook
+                      { Object.keys(this.state.user).length === 0 ? 'If you press the login button on the top right corner, it will Ask your facebook Username and Password. Then it will show your user details here in facebook' : `Hi ${this.state.user.profile.name.givenName} ${this.state.user.profile.name.familyName}, you are now Logged in...!` }
                     </p>
                     <div className="mt-5">
                       <small className="text-white font-weight-bold mb-0 mr-2">

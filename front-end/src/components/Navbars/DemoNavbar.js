@@ -47,8 +47,8 @@ class DemoNavbar extends React.Component {
     user: {}
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.responseFacebook = this.responseFacebook.bind(this);
   }
 
@@ -71,13 +71,21 @@ class DemoNavbar extends React.Component {
   };
 
   async responseFacebook({ accessToken }) {
-    const { data } = await FacebookService.auth(accessToken);
+    try {
+      const { data } = await FacebookService.auth(accessToken);
 
-    this.setState({
-      user: data
-    }, () => {
-      toast.success("You have successfully logged in");
-    });
+      this.setState({
+        user: data
+      }, () => {
+        toast.success("You have successfully logged in");
+        this.props.userDetails(this.state.user);
+      });
+    } catch(err) {
+
+      // Catching errors in backend
+      toast.error("You are encountering error in loggin in your facebook, Please Try Again...!");
+    }
+    
   }
 
   render() {

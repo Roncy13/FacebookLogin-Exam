@@ -20,7 +20,11 @@ export class FacebookStrategy {
           profile: any,
           done: any,
         ) => {
-          const user = {};
+          const user = { 
+            accessToken,
+            refreshToken,
+            profile
+          };
           return done(null, user);
         },
       ),
