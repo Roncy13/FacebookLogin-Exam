@@ -19,12 +19,52 @@ import React from "react";
 
 // reactstrap components
 import { Container, Row, Col } from "reactstrap";
+import queryString from 'query-string';
+import { css } from "@emotion/core";
+import ClipLoader from "react-spinners/ClipLoader";
+import { ToastContainer, toast } from 'react-toastify';
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+`;
 
 class Hero extends React.Component {
+
+  state = {
+    loading: false
+  }
+  constructor() {
+    super();
+    this.responseFacebook = this.responseFacebook.bind(this);
+  }
+
+  async componentDidMount() {
+    this.authenticate();
+  }
+
+  async authenticate() {
+    const search = window.location.search,
+      params = queryString.parse(search);
+
+    if (Object.keys(params).length > 0) {
+      const { code = "" } = params;
+
+      if (code === "") {
+        toast.error("You can't move forward without logging in");
+      } 
+    }
+  }
+
+  responseFacebook(params) {
+    console.log(params);
+  }
+ 
   render() {
     return (
       <>
         <div className="position-relative">
+          <ToastContainer />
           {/* Hero for FREE version */}
           <section className="section section-hero section-shaped">
             {/* Background circles */}
@@ -43,6 +83,15 @@ class Hero extends React.Component {
             <Container className="shape-container d-flex align-items-center py-lg">
               <div className="col px-0">
                 <Row className="align-items-center justify-content-center">
+                  <Col lg="12" md="12" sm = "12">
+                    <div className="sweet-loading">
+                      <ClipLoader
+                        css={override}
+                        size={50}
+                        loading={this.state.loading}
+                      />
+                    </div>
+                  </Col>
                   <Col className="text-center" lg="6">
                   
                     <p className="lead text-white">

@@ -34,14 +34,22 @@ import {
   UncontrolledTooltip
 } from "reactstrap";
 import './DemoNavBar.css';
-import * as axios from "axios";
 import { FACEBOOK_DETAILS } from "utilities/constant";
+import FacebookService from '../../utilities/FacebookService';
+import { toast } from "react-toastify";
 
 class DemoNavbar extends React.Component {
 
+  state = {
+    collapseClasses: "",
+    collapseOpen: false,
+    loading: true,
+    user: {}
+  };
+
   constructor() {
     super();
-    this.authenticate = this.authenticate.bind(this);
+    this.responseFacebook = this.responseFacebook.bind(this);
   }
 
   componentDidMount() {
@@ -49,10 +57,6 @@ class DemoNavbar extends React.Component {
     // initialise
     headroom.init();
   }
-  state = {
-    collapseClasses: "",
-    collapseOpen: false
-  };
 
   onExiting = () => {
     this.setState({
@@ -66,18 +70,19 @@ class DemoNavbar extends React.Component {
     });
   };
 
-  async authenticate({ accessToken: access_token }) {
-    const authResponse = await axios.get(
-      "http://localhost:8080/auth/facebook",
-      {
-        params: { access_token }
-      }
-    );
+  async responseFacebook({ accessToken }) {
+    const { data } = await FacebookService.auth(accessToken);
 
-    console.log(authResponse);
+    this.setState({
+      user: data
+    }, () => {
+      toast.success("You have successfully logged in");
+    });
   }
- 
+
   render() {
+    const responseFacebook = this.responseFacebook;
+
     return (
       <>
         <header className="header-global">
@@ -154,9 +159,11 @@ class DemoNavbar extends React.Component {
                   <NavItem className="d-none d-lg-block ml-lg-4">
                     <FacebookLogin
                       appId={FACEBOOK_DETAILS.appId}
-                      fields={FACEBOOK_DETAILS.fields}
-                      callback={ this.authenticate }
+                      fields={FACEBOOK_DETAILS.fields} 
                       textButton="Login"
+                      redirectUri="https://c4698656.ngrok.io"
+                      isMobile={true}
+                      callback={ responseFacebook }
                     />
                   </NavItem>
                 </Nav>

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as FacebookTokenStrategy from 'passport-facebook-token';
 import { use } from 'passport';
-import { access } from 'fs';
 
 @Injectable()
 export class FacebookStrategy {
@@ -21,9 +20,7 @@ export class FacebookStrategy {
           profile: any,
           done: any,
         ) => {
-          const user = {
-            accessToken, refreshToken ,profile
-          };
+          const user = {};
           return done(null, user);
         },
       ),

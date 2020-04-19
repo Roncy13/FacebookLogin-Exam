@@ -8,5 +8,10 @@ export class AuthController {
   async getTokenFacebook(@Req() { user = {} }, @Res() res) {
     return res.json(user);
   }
+
+  @Get('refresh-token')
+  async refershToken() {
+
+  }
 }
 
